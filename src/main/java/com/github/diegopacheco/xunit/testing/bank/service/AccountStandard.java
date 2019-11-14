@@ -25,7 +25,8 @@ public class AccountStandard implements Account {
             throw new MinimalValueException();
         }
 
-        accountModel.setValue(accountModel.getValue() + value);
+        Double roundedResult = roundNumber(accountModel.getValue() + value);
+        accountModel.setValue(roundedResult);
     }
 
     @Override
@@ -67,6 +68,26 @@ public class AccountStandard implements Account {
 
     @Override
     public boolean transfer(AccountModel origin, AccountModel destination, Double value) {
+        if (origin == null) {
+            throw new InvalidValueException("Origin can't be null");
+        }
+
+        if (origin.getValue() == null) {
+            throw new InvalidValueException("Origin value can't be null");
+        }
+
+        if (destination == null) {
+            throw new InvalidValueException("Destination can't be null");
+        }
+
+        if (destination.getValue() == null) {
+            throw new InvalidValueException("Destination value can't be null");
+        }
+
+        if (value == null) {
+            throw new InvalidValueException("Value can't be null");
+        }
+
         Double fee = value * 0.05;
         Double newOrigin = origin.getValue() - (value + fee);
         Double newDestination = destination.getValue() + value;
@@ -75,9 +96,13 @@ public class AccountStandard implements Account {
             throw new InvalidValueException("Value to transfer is greater than account amount");
         }
 
-        origin.setValue(newOrigin);
-        destination.setValue(newDestination);
+        origin.setValue(roundNumber(newOrigin));
+        destination.setValue(roundNumber(newDestination));
 
         return true;
+    }
+
+    private Double roundNumber(Double number) {
+        return Math.floor(number * 100) / 100;
     }
 }

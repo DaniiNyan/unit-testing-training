@@ -25,6 +25,34 @@ public class AccountStandardTest {
     }
 
     @Test
+    public void shouldDepositCents() {
+        AccountModel accountModel = new AccountModel();
+        accountModel.setValue(100.33);
+        accountModel.setId(1);
+        accountModel.setName("Daniela");
+
+        Account accountStandard = new AccountStandard();
+        accountStandard.deposit(accountModel, 100.69);
+
+        assertEquals(201.02, accountModel.getValue());
+    }
+
+    @Test
+    public void shouldDepositBigNumber() {
+        AccountModel accountModel = new AccountModel();
+        accountModel.setValue(10.0);
+        accountModel.setId(1);
+        accountModel.setName("Daniela");
+
+        Account accountStandard = new AccountStandard();
+        accountStandard.deposit(accountModel,
+                200_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000.0);
+
+        assertEquals(200_000_000_000_000_000_000_000_000_000_000_000_000_000_000_010.0,
+                accountModel.getValue());
+    }
+
+    @Test
     public void shouldThrowExceptionWhenValueIsMinorThan100() {
         AccountModel accountModel = new AccountModel();
         accountModel.setValue(10.0);
@@ -84,6 +112,21 @@ public class AccountStandardTest {
         accountStandard.withdraw(accountModel, 5.0);
 
         assertEquals(5.0, accountModel.getValue());
+    }
+
+    @Test
+    public void shouldWithdrawBigNumber() {
+        AccountModel accountModel = new AccountModel();
+        accountModel.setValue(300_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000.0);
+        accountModel.setId(1);
+        accountModel.setName("Daniela");
+
+        Account accountStandard = new AccountStandard();
+        accountStandard.withdraw(accountModel,
+                200_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000.0);
+
+        assertEquals(100_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000.0,
+                accountModel.getValue());
     }
 
     @Test
@@ -203,6 +246,25 @@ public class AccountStandardTest {
     }
 
     @Test
+    public void shouldTransferCentsToAnother() {
+        AccountModel original = new AccountModel();
+        original.setValue(300.0);
+        original.setId(1);
+        original.setName("Daniela");
+
+        AccountModel destination = new AccountModel();
+        destination.setValue(100.41);
+        destination.setId(2);
+        destination.setName("Andressa");
+
+        Account accountStandard = new AccountStandard();
+        accountStandard.transfer(original, destination, 100.69);
+
+        assertEquals(194.27, original.getValue());
+        assertEquals(201.1, destination.getValue());
+    }
+
+    @Test
     public void shouldThrowExceptionWhenTransferValueIsGreaterThanAccountAmount() {
         AccountModel original = new AccountModel();
         original.setValue(50.0);
@@ -235,6 +297,90 @@ public class AccountStandardTest {
         Account accountStandard = new AccountStandard();
         assertThrows(InvalidValueException.class, () -> {
             accountStandard.transfer(original, destination, 49.0);
+        });
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenOriginTransferValueIsNull() {
+        AccountModel original = new AccountModel();
+        original.setValue(10.0);
+        original.setId(1);
+        original.setName("Daniela");
+
+        AccountModel destination = new AccountModel();
+        destination.setValue(100.0);
+        destination.setId(2);
+        destination.setName("Andressa");
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.transfer(original, destination, null);
+        });
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenOriginTransferAccountValueIsNull() {
+        AccountModel original = new AccountModel();
+        original.setValue(null);
+        original.setId(1);
+        original.setName("Daniela");
+
+        AccountModel destination = new AccountModel();
+        destination.setValue(100.0);
+        destination.setId(2);
+        destination.setName("Andressa");
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.transfer(original, destination, 40.0);
+        });
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenDestinationTransferAccountValueIsNull() {
+        AccountModel original = new AccountModel();
+        original.setValue(100.0);
+        original.setId(1);
+        original.setName("Daniela");
+
+        AccountModel destination = new AccountModel();
+        destination.setValue(null);
+        destination.setId(2);
+        destination.setName("Andressa");
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.transfer(original, destination, 40.0);
+        });
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenOriginTransferAccountIsNull() {
+        AccountModel original = null;
+
+        AccountModel destination = new AccountModel();
+        destination.setValue(100.0);
+        destination.setId(2);
+        destination.setName("Andressa");
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.transfer(original, destination, 40.0);
+        });
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenDestinationTransferAccountIsNull() {
+        AccountModel original = new AccountModel();
+        original.setValue(100.0);
+        original.setId(1);
+        original.setName("Daniela");
+
+        AccountModel destination = null;
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.transfer(original, destination, 40.0);
         });
     }
 
