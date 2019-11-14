@@ -9,6 +9,14 @@ public class AccountStandard implements Account {
 
     @Override
     public void deposit(AccountModel accountModel, Double value) {
+        if (accountModel == null) {
+            throw new InvalidValueException("Account can't be null");
+        }
+
+        if (accountModel.getValue() == null) {
+            throw new InvalidValueException("Account value can't be null");
+        }
+
         if (value == null) {
             throw new InvalidValueException("Value can't be null");
         }
@@ -22,6 +30,14 @@ public class AccountStandard implements Account {
 
     @Override
     public void withdraw(AccountModel accountModel, Double value) {
+        if (accountModel == null) {
+            throw new InvalidValueException("Account can't be null");
+        }
+
+        if (accountModel.getValue() == null) {
+            throw new InvalidValueException("Account value can't be null");
+        }
+
         if (value == null) {
             throw new InvalidValueException("Value can't be null");
         }
@@ -38,6 +54,14 @@ public class AccountStandard implements Account {
 
     @Override
     public Double check(AccountModel accountModel) {
+        if (accountModel == null) {
+            throw new InvalidValueException("Account can't be null");
+        }
+
+        if (accountModel.getValue() == null) {
+            throw new InvalidValueException("Account value can't be null");
+        }
+
         return accountModel.getValue();
     }
 

@@ -51,6 +51,29 @@ public class AccountStandardTest {
     }
 
     @Test
+    public void shouldThrowExceptionWhenAccountValueIsNull() {
+        AccountModel accountModel = new AccountModel();
+        accountModel.setValue(null);
+        accountModel.setId(1);
+        accountModel.setName("Daniela");
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.deposit(accountModel, 10.0);
+        });
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenAccountIsNull() {
+        AccountModel accountModel = null;
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.deposit(accountModel, 10.0);
+        });
+    }
+
+    @Test
     public void shouldWithdraw() {
         AccountModel accountModel = new AccountModel();
         accountModel.setValue(10.0);
@@ -104,6 +127,29 @@ public class AccountStandardTest {
     }
 
     @Test
+    public void shouldThrowExceptionWhenWithdrawAccountValueIsNull() {
+        AccountModel accountModel = new AccountModel();
+        accountModel.setValue(null);
+        accountModel.setId(1);
+        accountModel.setName("Daniela");
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.withdraw(accountModel, 10.0);
+        });
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenWithdrawAccountIsNull() {
+        AccountModel accountModel = null;
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.withdraw(accountModel, 10.0);
+        });
+    }
+
+    @Test
     public void shouldReturnAccountAmount() {
         AccountModel accountModel = new AccountModel();
         accountModel.setValue(10.0);
@@ -112,6 +158,29 @@ public class AccountStandardTest {
 
         Account accountStandard = new AccountStandard();
         assertEquals(10.0, accountStandard.check(accountModel));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenCheckAccountValueIsNull() {
+        AccountModel accountModel = new AccountModel();
+        accountModel.setValue(null);
+        accountModel.setId(1);
+        accountModel.setName("Daniela");
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.check(accountModel);
+        });
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenCheckAccountIsNull() {
+        AccountModel accountModel = null;
+
+        Account accountStandard = new AccountStandard();
+        assertThrows(InvalidValueException.class, () -> {
+            accountStandard.check(accountModel);
+        });
     }
 
     @Test
